@@ -127,6 +127,30 @@ function App() {
                     }
                 />
             </div>
+
+            <footer className='absolute bottom-0 text-sm gap-y-1 px-4 lg:text-center py-4 lg:grid lg:place-items-center w-full'>
+                <div className='font-medium text-gray-600'>
+                    Developed by{" "}
+                    <a
+                        href='https://tmnyoni.site'
+                        rel='noopener'
+                        target='_blank'
+                    >
+                        Tawanda M.
+                    </a>
+                </div>
+                <p className='text-gray-600 text-xs'>
+                    Using{" "}
+                    <a
+                        href='https://github.com/Stability-AI/generative-models'
+                        target='_blank'
+                        rel='noopener'
+                    >
+                        D-XL 1.0-base
+                    </a>{" "}
+                    Developed by Stability AI
+                </p>
+            </footer>
         </div>
     );
 }
