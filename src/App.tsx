@@ -73,7 +73,7 @@ export default function App() {
     }
 
     return (
-        <div className='@container h-dvh'>
+        <div className='@container min-h-dvh'>
             <nav className='border-b px-4'>
                 <div className='flex justify-between items-center py-4 max-w-5xl mx-auto'>
                     <div className='flex items-center gap-x-2'>
