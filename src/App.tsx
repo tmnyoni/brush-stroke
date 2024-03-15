@@ -76,6 +76,9 @@ function App() {
                 </div>
             </nav>
             <div className='max-w-4xl mx-auto mt-8 px-4'>
+                <h1 className='text-lg font-medium'>
+                    Generate Images using AI
+                </h1>
                 <Form onSubmit={onSubmit} className='py-2'>
                     <fieldset className='flex w-full gap-x-2'>
                         <TextField
