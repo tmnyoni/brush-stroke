@@ -7,6 +7,7 @@ import {
     Input,
     TextField,
 } from "react-aria-components";
+import { cn } from "./lib/utils";
 
 async function query(data: { inputs: string }) {
     const response = await fetch(
@@ -25,10 +26,11 @@ async function query(data: { inputs: string }) {
     return result;
 }
 
-function App() {
+export default function App() {
     const [status, setStatus] = React.useState<
         "idle" | "loading" | "success" | "error"
     >("idle");
+
     const [prompt, setPrompt] = React.useState("");
     const imgRef = React.useRef<HTMLImageElement>(null);
 
@@ -48,6 +50,25 @@ function App() {
         } catch (error) {
             setStatus("error");
             console.log(error);
+        }
+    }
+
+    const [isDownloading, setIsDownloading] = React.useState(false);
+    async function onDownload() {
+        try {
+            setIsDownloading(true);
+            if (imgRef.current) {
+                const downloadLink = document.createElement("a");
+                downloadLink.href = imgRef.current.src;
+                downloadLink.download = `brush-stroke-${Date.now()}.png`;
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                downloadLink.remove();
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setIsDownloading(false);
         }
     }
 
@@ -92,13 +113,13 @@ function App() {
                         >
                             <Input
                                 placeholder='Type your prompt'
-                                className='border h-12 px-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+                                className='border h-12 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
                             />
                             <FieldError />
                         </TextField>
                         <Button
                             type='submit'
-                            className='hidden lg:inline-flex h-12 lg:w-40 justify-center rounded-xl items-center gap-x-2 px-4 py-2 font-medium text-white bg-indigo-600 border border-transparent shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+                            className='hidden lg:inline-flex h-12 lg:w-40 justify-center rounded-md items-center gap-x-2 px-4 py-2 font-medium text-white bg-indigo-600 border border-transparent shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
                         >
                             {status === "loading" && (
                                 <svg
@@ -123,14 +144,25 @@ function App() {
                 </Form>
 
                 <div className='mt-8'>
-                    <img
-                        ref={imgRef}
-                        alt='result'
-                        className={
-                            "w-full lg:aspect-video lg:object-contain rounded-lg " +
-                            (status === "success" ? "block" : "hidden")
-                        }
-                    />
+                    <>
+                        <img
+                            ref={imgRef}
+                            alt='result'
+                            className={
+                                "w-full lg:aspect-video lg:object-contain rounded-lg " +
+                                (status === "success" ? "block" : "hidden")
+                            }
+                        />
+                        <Button
+                            onPress={onDownload}
+                            className={cn(
+                                "mt-1 border px-4 py-1 rounded-md text-xs font-medium hover:bg-gray-50 focus:bg-gray-100",
+                                status === "success" ? "block" : "hidden"
+                            )}
+                        >
+                            {!isDownloading ? "Download" : "Downloading"}
+                        </Button>
+                    </>
                     {status === "error" && (
                         <div className='mt-8 text-red-600'>
                             An error occurred. Please try again.
@@ -187,5 +219,3 @@ function App() {
         </div>
     );
 }
-
-export default App;
